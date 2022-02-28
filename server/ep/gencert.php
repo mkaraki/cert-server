@@ -3,7 +3,7 @@
 require_once '../_config.php';
 require_once '../_auth.php';
 
-if (!isset($_POST['csr'])) {
+if (!isset($_POST['csr']) || openssl_csr_get_subject($_POST['csr']) === false) {
     header("Content-type: application/json; charset=utf-8");
     http_response_code(400);
 
@@ -11,6 +11,10 @@ if (!isset($_POST['csr'])) {
         "error" => "User Error"
     )));
 }
+
+$serial = intval(time() . rand(0, 999));
+
+file_put_contents($cert_dir . '/u-' . $serial . '.csr', $_POST['csr']);
 
 $privkey = null;
 
@@ -43,10 +47,12 @@ if (
     $ca = openssl_x509_read(file_get_contents($cert_dir . '/i-' . $_POST['ca'] . '.crt'));
     $privkey = openssl_pkey_get_private(file_get_contents($cert_dir . '/i-' . $_POST['ca'] . '.key'));
 } else {
-    $privkey = openssl_pkey_new(array(
-        "private_key_bits" => $default_key_bits,
-        "private_key_type" => OPENSSL_KEYTYPE_RSA,
-    ));
+    header("Content-type: application/json; charset=utf-8");
+    http_response_code(400);
+
+    die(json_encode(array(
+        "error" => "Wrong CA"
+    )));
 }
 
 $exp_day = $default_exp_day;
@@ -62,7 +68,8 @@ $x509 = openssl_csr_sign(
     $ca,
     $privkey,
     $days = $exp_day,
-    array('digest_alg' => $_POST['digest'] ?? $default_digest_argo)
+    array('digest_alg' => $_POST['digest'] ?? $default_digest_argo),
+    $serial = $serial
 );
 
 if ($x509 === false) {

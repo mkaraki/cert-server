@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cert-server</title>
+    <style>
+        form {
+            margin-bottom: 15px;
+            padding: 15px;
+            padding-top: 2px;
+            border: 1px solid black;
+        }
+
+        h1,
+        h5 {
+            margin: 3px;
+        }
+
+        .toggler {
+            cursor: pointer;
+        }
+
+        .toggler.hide::before {
+            content: '▶';
+        }
+
+        .toggler:not(.hide)::before {
+            content: '▼';
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>cert-server</h1>
+    <a href="ca.php">CAs</a>
+    <hr />
+    <form action="ep/genprivkey.php" method="post">
+        <h5 class="toggler hide" data-target="fpriv">Private Key</h5>
+        <div class="hidden" id="fpriv">
+            <input type="submit" value="Generate Private Key">
+        </div>
+    </form>
+
+    <form action="ep/gencsr.php" method="post">
+        <h5 class="toggler hide" data-target="fcsr">Certificate Request</h5>
+        <div class="hidden" id="fcsr">
+            <textarea name="privkey" id="privkey" cols="70" rows="30"
+                placeholder="-----BEGIN PRIVATE KEY-----"></textarea>
+            <br />
+            <label for="cn">Common Name</label>
+            <input type="text" name="cn" id="f-cn" placeholder="www.example.com" /><br />
+            <label for="country">Country Code</label>
+            <input type="text" name="country" id="country" placeholder="US"><br />
+            <label for="state">State</label>
+            <input type="text" name="state" id="state" placeholder="NW"><br />
+            <label for="organization">Organization</label>
+            <input type="text" name="organization" id="organization" placeholder="Example Company">
+            <br />
+            <input type="submit" value="Generate CSR">
+        </div>
+    </form>
+
+    <form action="ep/gencert.php" method="post">
+        <h5 class="toggler hide" data-target="fcert">Certificate</h5>
+        <div class="hidden" id="fcert">
+            <textarea name="csr" id="csr" cols="70" rows="27"
+                placeholder="-----BEGIN CERTIFICATE REQUEST-----"></textarea><br />
+            <label for="ca">CA to Use</label>
+            <input type="text" name="ca" id="ca" placeholder="london-headquarters" /><br />
+            <label for="exp">Expire in</label>
+            <input type="number" name="exp" id="exp" value="365" max="397" /> days
+            <br />
+            <input type="submit" value="Generate Certification">
+        </div>
+    </form>
+
+    <script>
+        Array.prototype.forEach.call(document.getElementsByClassName('toggler'), function (e) {
+            e.addEventListener('click', function () {
+                document.getElementById(e.dataset.target).classList.toggle('hidden');
+                e.classList.toggle('hide');
+            });
+        });
+    </script>
+</body>
+
+</html>
