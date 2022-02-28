@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cert-server</title>
+    <style>
+    </style>
+</head>
+
+<body>
+    <form action="genca.php" method="post">
+        <label for="f-name">Cert Name</label>
+        <input type="text" id="f-name" name="name" placeholder="london-headquarters" /><br /><br />
+        <label for="cn">Common Name</label>
+        <input type="text" name="cn" id="f-cn" placeholder="Example Company Root CA" /><br />
+        <label for="country">Country Code</label>
+        <input type="text" name="country" id="country" placeholder="US"><br />
+        <label for="state">State</label>
+        <input type="text" name="state" id="state" placeholder="NW"><br />
+        <label for="organization">Organization</label>
+        <input type="text" name="organization" id="organization" placeholder="Example Company"><br />
+        <label for="exp">Expire in</label>
+        <input type="number" name="exp" id="exp" value="3650" /> days
+        <br />
+        <input type="submit" value="Generate CSR">
+    </form>
+</body>
+
+</html>

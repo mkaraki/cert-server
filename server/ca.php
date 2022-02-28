@@ -32,6 +32,7 @@ foreach ($files as $f) {
 
 <body>
     <a href="admin/importca.php">Import</a>
+    <a href="admin/newca.html">New</a>
     <table>
         <tr>
             <th>Common Name</th>
