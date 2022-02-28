@@ -1,0 +1,9 @@
+services:
+  app:
+    build: server
+    ports:
+      - "8080:80"
+    volumes:
+      - ./server:/var/www/html
+      - ./certs:/var/www/certs
+    restart: unless-stopped
